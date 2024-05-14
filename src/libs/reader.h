@@ -4,15 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "parser.h"
+
 int read_file(const char *filename) {
     FILE *file = fopen(filename, "r");
-    if(file == NULL) {
-        fprintf(stderr, "Error: File '%s' not found\n", filename);
+    if (file == NULL) {
+        perror("Error opening file");
         return EXIT_FAILURE;
     }
-    int c;
-    while((c = fgetc(file)) != EOF) {
-        putchar(c);
+    
+    char line[MAX_LINE_LENGTH];
+    while (fgets(line, sizeof(line), file)) {
+        parse_line(line);
     }
     
     fclose(file);

@@ -1,0 +1,9 @@
+@ this is the current comment the compiler picks up 
+@ why need a main function when the file is the main function
+
+@ std out is because of linux
+stdout("Hello, world!")
+@ default to exiting with 0
+@ also exit with another code:
+exit(1)
+@ \0 is the default delimiter (WILL NEVER CHANGE)

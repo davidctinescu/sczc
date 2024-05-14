@@ -1,6 +1,7 @@
 # SCZC (SIMPLE C ZRES COMPILER)
 ---
-meant to replace zres
+meant to replace zres (written in rust)
+
 ---
 current directory structure:
 ```
