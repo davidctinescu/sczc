@@ -13,6 +13,5 @@ main_dir/
     ├── main.c
     └── libs/
         └── reader.h
-        └── parser.h
 ```
 run using `make all`

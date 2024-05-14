@@ -6,5 +6,19 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
     
-    return read_file(argv[1]);
+    TokenNode *tokenList = read_file(argv[1]);
+    if (tokenList == NULL) {
+        fprintf(stderr, "Error reading file\n");
+        return EXIT_FAILURE;
+    }
+
+    TokenNode *current = tokenList;
+    while (current != NULL) {
+        printf("Token: %s\n", current->token);
+        current = current->next;
+    }
+
+    freeTokenList(tokenList);
+
+    return EXIT_SUCCESS;
 }
