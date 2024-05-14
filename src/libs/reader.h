@@ -16,7 +16,6 @@ int read_file(const char *filename) {
     }
     
     fclose(file);
-    printf("\nFile '%s' successfully read.\n", filename);
     return EXIT_SUCCESS;
 }
 
