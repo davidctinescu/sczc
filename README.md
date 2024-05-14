@@ -14,4 +14,4 @@ main_dir/
     └── libs/
         └── reader.h
 ```
-run using `make all`
+run using `make all` then use `./out/sczc <input_file>`
