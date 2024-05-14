@@ -12,7 +12,7 @@ main_dir/
 └── src/
     ├── main.c
     └── libs/
-        └── filereader.h
+        └── reader.h
         └── parser.h
 ```
 run using `make all`
