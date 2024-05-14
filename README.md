@@ -5,7 +5,7 @@ meant to replace zres (written in rust)
 ---
 current directory structure:
 ```
-project_directory/
+main_dir/
 │
 ├── Makefile
 ├── out/
@@ -13,5 +13,6 @@ project_directory/
     ├── main.c
     └── libs/
         └── filereader.h
+        └── parser.h
 ```
 run using `make all`
