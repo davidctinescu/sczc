@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
     
     TokenNode *tokenList = read_file(argv[1]);
     if (tokenList == NULL) {
-        fprintf(stderr, "Error reading file\n");
+        fprintf(stderr, "Error reading file %s\n", argv[1]);
         return EXIT_FAILURE;
     }
 
