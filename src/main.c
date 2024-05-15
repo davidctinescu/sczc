@@ -1,4 +1,5 @@
 #include "libs/compiler.h"
+#include <unistd.h>
 
 int main(int argc, char *argv[]) {
     if(argc != 2) {
@@ -21,17 +22,15 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Remove the extension from the input filename
     char *input_filename = argv[1];
     char *dot = strrchr(input_filename, '.');
     size_t base_length = (dot == NULL) ? strlen(input_filename) : (dot - input_filename);
     
-    char output_filename[base_length + 3]; // +3 for ".c" and null terminator
+    char output_filename[base_length + 3];
     strncpy(output_filename, input_filename, base_length);
     output_filename[base_length] = '\0';
     strcat(output_filename, ".c");
 
-    // Write the generated C code to the output file
     FILE *output_file = fopen(output_filename, "w");
     if (output_file == NULL) {
         fprintf(stderr, "Error opening file %s for writing\n", output_filename);
@@ -45,6 +44,15 @@ int main(int argc, char *argv[]) {
 
     free(c_code);
     freeTokenList(tokenList);
+
+    char executable_filename[base_length + 4];
+    strncpy(executable_filename, input_filename, base_length);
+    executable_filename[base_length] = '\0';
+    strcat(executable_filename, ".out");
+
+    char *compile_args[] = {"gcc", "-o", executable_filename, output_filename, NULL}; // Compile the generated C file
+    execvp("gcc", compile_args);
+    perror("Error compiling C code");
 
     return EXIT_SUCCESS;
 }

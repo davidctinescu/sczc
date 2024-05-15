@@ -1,2 +1,4 @@
 out/
 examples/*.c
+examples/*.o
+examples/*.out

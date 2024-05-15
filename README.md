@@ -4,8 +4,13 @@ THIS FOLLOWS GENERAL DEFINITIONS OF A COMPILER!
 
 meant to replace zres (written in rust)
 compiles to intermediate represantation (C code) and uses GCC to produce the file executable.
+
+please make sure to have `make` installed and run, to compile:
+```sh
+make clean all
+```
 dependencies:
-`gcc`
+`gcc make`
 
 ---
 current directory structure:
