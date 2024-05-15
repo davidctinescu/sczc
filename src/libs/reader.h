@@ -31,32 +31,27 @@ void freeTokenList(TokenNode *head) {
 }
 
 TokenNode* parse_line(const char *line) {
-    if (line[0] == '@') { return NULL; }
-
-    const char *start = line;
-    while (isspace(*start)) { start++; }
-    const char *end = line + strlen(line) - 1;
-    while (end > start && isspace(*end)) { end--; }
-    if (end < start) { return NULL; }
-
-    char *trimmed_line = strndup(start, end - start + 1);
-
-    char *token_copy = strdup(trimmed_line);
-    free(trimmed_line);
-
-    char *token;
-    TokenNode *head = NULL;
-
-    token = strtok(token_copy, "\0");
-    while (token != NULL) {
-        TokenNode *newNode = createTokenNode(token);
-        newNode->next = head;
-        head = newNode;
-
-        token = strtok(NULL, "\0");
+    if (line[0] == '@') {
+        return NULL;
     }
 
-    free(token_copy);
+    const char *start = line;
+    while (isspace(*start)) {
+        start++;
+    }
+    const char *end = line + strlen(line) - 1;
+    while (end > start && isspace(*end)) {
+        end--;
+    }
+    if (end < start) {
+        return NULL;
+    }
+
+    size_t trimmed_length = end - start + 1;
+    char *trimmed_line = strndup(start, trimmed_length);
+
+    TokenNode *head = createTokenNode(trimmed_line);
+    free(trimmed_line);
 
     return head;
 }
