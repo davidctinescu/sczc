@@ -1,7 +1,7 @@
 @ this is the current comment the compiler picks up 
 @ why need a main function when the file is the main function
 
-@ std out is because of linux
+@ std out is because of standard library and output (better name than printf LOL)
 stdout("Hello, world!")
 @ default to exiting with 0
 @ also exit with another code:

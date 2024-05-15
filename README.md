@@ -15,3 +15,6 @@ main_dir/
         └── reader.h
 ```
 run using `make all` then use `./out/sczc <input_file>`
+
+---
+currently introduced file reading and basic tokenization

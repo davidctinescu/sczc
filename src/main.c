@@ -12,6 +12,8 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
+    tokenList = processTokens(tokenList);
+
     TokenNode *current = tokenList;
     while (current != NULL) {
         printf("Token: %s\n", current->token);

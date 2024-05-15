@@ -105,4 +105,52 @@ TokenNode* read_file(const char *filename) {
     return reverseTokenList(head);
 }
 
+TokenNode* processTokens(TokenNode *head) {
+    TokenNode *current = head;
+    TokenNode *exitNode = NULL;
+    TokenNode *prev = NULL;
+
+    while (current != NULL) {
+        if (strncmp(current->token, "stdout(", 7) == 0) {
+            char *str = current->token + 7; // skip "stdout("
+            size_t len = strlen(str);
+            if (str[len - 1] == ')') {
+                str[len - 1] = '\0'; // remove trailing ')'
+                char *newToken = malloc(len + 7); // space for "PRINTF(" and ")"
+                if (newToken == NULL) {
+                    fprintf(stderr, "Memory allocation failed!\n");
+                    exit(EXIT_FAILURE);
+                }
+                sprintf(newToken, "PRINTF(%s)", str);
+                free(current->token);
+                current->token = newToken;
+            }
+        } else if (strncmp(current->token, "exit(", 5) == 0) {
+            char *err_code_str = current->token + 5; // skip "exit("
+            size_t len = strlen(err_code_str);
+            if (err_code_str[len - 1] == ')') {
+                err_code_str[len - 1] = '\0'; // remove trailing ')'
+                char *newToken = malloc(len + 6); // space for "EXIT(" and ")"
+                if (newToken == NULL) {
+                    fprintf(stderr, "Memory allocation failed!\n");
+                    exit(EXIT_FAILURE);
+                }
+                sprintf(newToken, "EXIT(%s)", err_code_str);
+                free(current->token);
+                current->token = newToken;
+                exitNode = current;
+            }
+        }
+        prev = current;
+        current = current->next;
+    }
+
+    if (prev != NULL && exitNode == NULL) {
+        TokenNode *exit0Node = createTokenNode("EXIT(0)");
+        prev->next = exit0Node;
+    }
+
+    return head;
+}
+
 #endif /* FILEREADER_H */
