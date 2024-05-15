@@ -140,6 +140,10 @@ TokenNode* processTokens(TokenNode *head) {
                 current->token = newToken;
                 exitNode = current;
             }
+        } else {
+            fprintf(stderr, "Error: Unrecognized token: %s\n", current->token);
+            freeTokenList(head);
+            exit(EXIT_FAILURE);
         }
         prev = current;
         current = current->next;
