@@ -9,6 +9,11 @@ please make sure to have `make` installed and run, to compile:
 ```sh
 make clean all
 ```
+to run:
+```sh
+./out/sczc <input_file>
+```
+
 dependencies:
 `gcc make`
 
@@ -24,7 +29,4 @@ main_dir/
     └── libs/
         └── reader.h
 ```
-run using `make all` then use `./out/sczc <input_file>`
-
----
-currently introduced file reading and basic tokenization
+currently introduced file reading and basic tokenization, IR (C) code generation and compilation
