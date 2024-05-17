@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
 
     NodLexem *listaTokenuri = citeste_fisier(argv[1]);
     if (listaTokenuri == NULL) {
-        fprintf(stderr, "Eroare la citirea fișierului %s\n", argv[1]);
+        fprintf(stderr, "Eroare la citirea fisierului %s\n", argv[1]);
         return EXIT_FAILURE;
     }
 
@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 
     FILE *fisier_iesire = fopen(nume_fisier_iesire, "w");
     if (fisier_iesire == NULL) {
-        fprintf(stderr, "Eroare la deschiderea fișierului %s pentru scriere\n", nume_fisier_iesire);
+        fprintf(stderr, "Eroare la deschiderea fisierului %s pentru scriere\n", nume_fisier_iesire);
         free(cod_c);
         elibereazaListaLexeme(listaTokenuri);
         return EXIT_FAILURE;

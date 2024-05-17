@@ -1,0 +1,7 @@
+String test = "hello"
+
+int test2 = 3
+
+float test3 = 3.0f
+
+@ currently incomplete and will not compile

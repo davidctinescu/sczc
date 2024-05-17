@@ -16,7 +16,7 @@ typedef struct NodLexem {
 NodLexem* creeazaNodLexem(const char *token) {
     NodLexem *nod = (NodLexem*)malloc(sizeof(NodLexem));
     if (nod == NULL) { 
-        fprintf(stderr, "Alocare memorie eșuată!\n"); 
+        fprintf(stderr, "Alocare memorie esuata!\n"); 
         exit(EXIT_FAILURE); 
     }
     nod->token = strdup(token);
@@ -77,7 +77,7 @@ NodLexem* inverseazaListaLexeme(NodLexem *cap) {
 NodLexem* citeste_fisier(const char *nume_fisier) {
     FILE *fisier = fopen(nume_fisier, "r");
     if (fisier == NULL) {
-        perror("Eroare la deschiderea fișierului");
+        perror("Eroare la deschiderea fisierului");
         return NULL;
     }
 
@@ -116,7 +116,7 @@ NodLexem* proceseazaLexeme(NodLexem *cap) {
                 str[len - 1] = '\0'; // eliminare paranteza de închidere
                 char *nouLexem = malloc(len + 7); // spațiu pentru "PRINTF(" și ")"
                 if (nouLexem == NULL) {
-                    fprintf(stderr, "Alocare memorie eșuată!\n");
+                    fprintf(stderr, "Alocare memorie esuata!\n");
                     exit(EXIT_FAILURE);
                 }
                 sprintf(nouLexem, "PRINTF(%s)", str);
@@ -130,7 +130,7 @@ NodLexem* proceseazaLexeme(NodLexem *cap) {
                 err_code_str[len - 1] = '\0'; // eliminare paranteza de închidere
                 char *nouLexem = malloc(len + 6); // spațiu pentru "EXIT(" și ")"
                 if (nouLexem == NULL) {
-                    fprintf(stderr, "Alocare memorie eșuată!\n");
+                    fprintf(stderr, "Alocare memorie esuata!\n");
                     exit(EXIT_FAILURE);
                 }
                 sprintf(nouLexem, "EXIT(%s)", err_code_str);

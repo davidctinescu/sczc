@@ -16,13 +16,15 @@ char* genereazaC(NodLexem *cap) {
             lungime_cod += snprintf(NULL, 0, "  printf(%s;\n", curent->token + 7);
         } else if (strncmp(curent->token, "EXIT(", 5) == 0) {
             lungime_cod += snprintf(NULL, 0, "  exit(%s;\n", curent->token + 5);
+        } else {
+            return NULL;
         }
         curent = curent->urmator;
     }
 
     char *cod_c = (char*)malloc(lungime_cod);
     if (cod_c == NULL) {
-        fprintf(stderr, "Alocare memorie eșuată!\n");
+        fprintf(stderr, "Alocare memorie esuata!\n");
         exit(EXIT_FAILURE);
     }
 
@@ -34,6 +36,8 @@ char* genereazaC(NodLexem *cap) {
             ptr += snprintf(ptr, lungime_cod - (ptr - cod_c), "  printf(%s;\n", curent->token + 7);
         } else if (strncmp(curent->token, "EXIT(", 5) == 0) {
             ptr += snprintf(ptr, lungime_cod - (ptr - cod_c), "  exit(%s;\n", curent->token + 5);
+        } else {
+            return NULL;
         }
         curent = curent->urmator;
     }
