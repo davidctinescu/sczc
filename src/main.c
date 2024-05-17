@@ -7,18 +7,18 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
     
-    TokenNode *tokenList = read_file(argv[1]);
+    LexemeNode *tokenList = read_file(argv[1]);
     if (tokenList == NULL) {
         fprintf(stderr, "Error reading file %s\n", argv[1]);
         return EXIT_FAILURE;
     }
 
-    tokenList = processTokens(tokenList);
+    tokenList = processLexemes(tokenList);
 
     char *c_code = generateC(tokenList);
     if (c_code == NULL) {
         fprintf(stderr, "Error generating C code\n");
-        freeTokenList(tokenList);
+        freeLexemeList(tokenList);
         return EXIT_FAILURE;
     }
 
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     if (output_file == NULL) {
         fprintf(stderr, "Error opening file %s for writing\n", output_filename);
         free(c_code);
-        freeTokenList(tokenList);
+        freeLexemeList(tokenList);
         return EXIT_FAILURE;
     }
 
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     fclose(output_file);
 
     free(c_code);
-    freeTokenList(tokenList);
+    freeLexemeList(tokenList);
 
     char executable_filename[base_length + 4];
     strncpy(executable_filename, input_filename, base_length);

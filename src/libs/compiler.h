@@ -5,12 +5,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char* generateC(TokenNode *head) {
+char* generateC(LexemeNode *head) {
     const char* standard_libraries = "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n";
     size_t standard_length = strlen(standard_libraries);
     size_t code_length = standard_length + strlen("}\n") + 1;
 
-    TokenNode *current = head;
+    LexemeNode *current = head;
     while (current != NULL) {
         if (strncmp(current->token, "PRINTF(", 7) == 0) {
             code_length += snprintf(NULL, 0, "  printf(%s;\n", current->token + 7);

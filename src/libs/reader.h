@@ -8,29 +8,29 @@
 
 #define MAX_LINE_LENGTH 1024
 
-typedef struct TokenNode {
+typedef struct LexemeNode {
     char *token;
-    struct TokenNode *next;
-} TokenNode;
+    struct LexemeNode *next;
+} LexemeNode;
 
-TokenNode* createTokenNode(const char *token) {
-    TokenNode *node = (TokenNode*)malloc(sizeof(TokenNode));
+LexemeNode* createLexemeNode(const char *token) {
+    LexemeNode *node = (LexemeNode*)malloc(sizeof(LexemeNode));
     if (node == NULL) { fprintf(stderr, "Memory allocation failed!\n"); exit(EXIT_FAILURE); }
     node->token = strdup(token);
     node->next = NULL;
     return node;
 }
 
-void freeTokenList(TokenNode *head) {
+void freeLexemeList(LexemeNode *head) {
     while (head != NULL) {
-        TokenNode *temp = head;
+        LexemeNode *temp = head;
         head = head->next;
         free(temp->token);
         free(temp);
     }
 }
 
-TokenNode* parse_line(const char *line) {
+LexemeNode* parse_line(const char *line) {
     if (line[0] == '@') {
         return NULL;
     }
@@ -50,16 +50,16 @@ TokenNode* parse_line(const char *line) {
     size_t trimmed_length = end - start + 1;
     char *trimmed_line = strndup(start, trimmed_length);
 
-    TokenNode *head = createTokenNode(trimmed_line);
+    LexemeNode *head = createLexemeNode(trimmed_line);
     free(trimmed_line);
 
     return head;
 }
 
-TokenNode* reverseTokenList(TokenNode *head) {
-    TokenNode *prev = NULL;
-    TokenNode *current = head;
-    TokenNode *next = NULL;
+LexemeNode* reverseLexemeList(LexemeNode *head) {
+    LexemeNode *prev = NULL;
+    LexemeNode *current = head;
+    LexemeNode *next = NULL;
 
     while (current != NULL) {
         next = current->next;
@@ -71,7 +71,7 @@ TokenNode* reverseTokenList(TokenNode *head) {
     return prev;
 }
 
-TokenNode* read_file(const char *filename) {
+LexemeNode* read_file(const char *filename) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         perror("Error opening file");
@@ -79,31 +79,31 @@ TokenNode* read_file(const char *filename) {
     }
 
     char line[MAX_LINE_LENGTH];
-    TokenNode *head = NULL;
+    LexemeNode *head = NULL;
 
     while (fgets(line, sizeof(line), file)) {
-        TokenNode *lineTokens = parse_line(line);
-        if (lineTokens != NULL) {
-            TokenNode *current = lineTokens;
+        LexemeNode *lineLexemes = parse_line(line);
+        if (lineLexemes != NULL) {
+            LexemeNode *current = lineLexemes;
             while (current != NULL) {
-                TokenNode *newNode = createTokenNode(current->token);
+                LexemeNode *newNode = createLexemeNode(current->token);
                 newNode->next = head;
                 head = newNode;
                 current = current->next;
             }
-            freeTokenList(lineTokens);
+            freeLexemeList(lineLexemes);
         }
     }
 
     fclose(file);
 
-    return reverseTokenList(head);
+    return reverseLexemeList(head);
 }
 
-TokenNode* processTokens(TokenNode *head) {
-    TokenNode *current = head;
-    TokenNode *exitNode = NULL;
-    TokenNode *prev = NULL;
+LexemeNode* processLexemes(LexemeNode *head) {
+    LexemeNode *current = head;
+    LexemeNode *exitNode = NULL;
+    LexemeNode *prev = NULL;
 
     while (current != NULL) {
         if (strncmp(current->token, "stdout(", 7) == 0) {
@@ -111,33 +111,33 @@ TokenNode* processTokens(TokenNode *head) {
             size_t len = strlen(str);
             if (str[len - 1] == ')') {
                 str[len - 1] = '\0'; // remove trailing ')'
-                char *newToken = malloc(len + 7); // space for "PRINTF(" and ")"
-                if (newToken == NULL) {
+                char *newLexeme = malloc(len + 7); // space for "PRINTF(" and ")"
+                if (newLexeme == NULL) {
                     fprintf(stderr, "Memory allocation failed!\n");
                     exit(EXIT_FAILURE);
                 }
-                sprintf(newToken, "PRINTF(%s)", str);
+                sprintf(newLexeme, "PRINTF(%s)", str);
                 free(current->token);
-                current->token = newToken;
+                current->token = newLexeme;
             }
         } else if (strncmp(current->token, "exit(", 5) == 0) {
             char *err_code_str = current->token + 5; // skip "exit("
             size_t len = strlen(err_code_str);
             if (err_code_str[len - 1] == ')') {
                 err_code_str[len - 1] = '\0'; // remove trailing ')'
-                char *newToken = malloc(len + 6); // space for "EXIT(" and ")"
-                if (newToken == NULL) {
+                char *newLexeme = malloc(len + 6); // space for "EXIT(" and ")"
+                if (newLexeme == NULL) {
                     fprintf(stderr, "Memory allocation failed!\n");
                     exit(EXIT_FAILURE);
                 }
-                sprintf(newToken, "EXIT(%s)", err_code_str);
+                sprintf(newLexeme, "EXIT(%s)", err_code_str);
                 free(current->token);
-                current->token = newToken;
+                current->token = newLexeme;
                 exitNode = current;
             }
         } else {
             fprintf(stderr, "Error: Unrecognized token: %s\n", current->token);
-            freeTokenList(head);
+            freeLexemeList(head);
             exit(EXIT_FAILURE);
         }
         prev = current;
@@ -145,7 +145,7 @@ TokenNode* processTokens(TokenNode *head) {
     }
 
     if (prev != NULL && exitNode == NULL) {
-        TokenNode *exit0Node = createTokenNode("EXIT(0)");
+        LexemeNode *exit0Node = createLexemeNode("EXIT(0)");
         prev->next = exit0Node;
     }
 
