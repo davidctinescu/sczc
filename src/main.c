@@ -1,58 +1,58 @@
-#include "libs/compiler.h"
+#include "libs/compilator.h"
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
-    if(argc != 2) {
-        fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
-    
-    LexemeNode *tokenList = read_file(argv[1]);
-    if (tokenList == NULL) {
-        fprintf(stderr, "Error reading file %s\n", argv[1]);
+    if (argc != 2) {
+        fprintf(stderr, "Utilizare: %s <nume_fisier>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
-    tokenList = processLexemes(tokenList);
-
-    char *c_code = generateC(tokenList);
-    if (c_code == NULL) {
-        fprintf(stderr, "Error generating C code\n");
-        freeLexemeList(tokenList);
+    NodLexem *listaTokenuri = citeste_fisier(argv[1]);
+    if (listaTokenuri == NULL) {
+        fprintf(stderr, "Eroare la citirea fișierului %s\n", argv[1]);
         return EXIT_FAILURE;
     }
 
-    char *input_filename = argv[1];
-    char *dot = strrchr(input_filename, '.');
-    size_t base_length = (dot == NULL) ? strlen(input_filename) : (dot - input_filename);
-    
-    char output_filename[base_length + 3];
-    strncpy(output_filename, input_filename, base_length);
-    output_filename[base_length] = '\0';
-    strcat(output_filename, ".c");
+    listaTokenuri = proceseazaLexeme(listaTokenuri);
 
-    FILE *output_file = fopen(output_filename, "w");
-    if (output_file == NULL) {
-        fprintf(stderr, "Error opening file %s for writing\n", output_filename);
-        free(c_code);
-        freeLexemeList(tokenList);
+    char *cod_c = genereazaC(listaTokenuri);
+    if (cod_c == NULL) {
+        fprintf(stderr, "Eroare la generarea codului C\n");
+        elibereazaListaLexeme(listaTokenuri);
         return EXIT_FAILURE;
     }
 
-    fprintf(output_file, "%s", c_code);
-    fclose(output_file);
+    char *nume_fisier_intrare = argv[1];
+    char *punct = strrchr(nume_fisier_intrare, '.');
+    size_t lungime_baza = (punct == NULL) ? strlen(nume_fisier_intrare) : (punct - nume_fisier_intrare);
 
-    free(c_code);
-    freeLexemeList(tokenList);
+    char nume_fisier_iesire[lungime_baza + 3];
+    strncpy(nume_fisier_iesire, nume_fisier_intrare, lungime_baza);
+    nume_fisier_iesire[lungime_baza] = '\0';
+    strcat(nume_fisier_iesire, ".c");
 
-    char executable_filename[base_length + 4];
-    strncpy(executable_filename, input_filename, base_length);
-    executable_filename[base_length] = '\0';
-    strcat(executable_filename, ".out");
+    FILE *fisier_iesire = fopen(nume_fisier_iesire, "w");
+    if (fisier_iesire == NULL) {
+        fprintf(stderr, "Eroare la deschiderea fișierului %s pentru scriere\n", nume_fisier_iesire);
+        free(cod_c);
+        elibereazaListaLexeme(listaTokenuri);
+        return EXIT_FAILURE;
+    }
 
-    char *compile_args[] = {"gcc", "-o", executable_filename, output_filename, NULL}; // Compile the generated C file
-    execvp("gcc", compile_args);
-    perror("Error compiling C code");
+    fprintf(fisier_iesire, "%s", cod_c);
+    fclose(fisier_iesire);
+
+    free(cod_c);
+    elibereazaListaLexeme(listaTokenuri);
+
+    char nume_executabil[lungime_baza + 4];
+    strncpy(nume_executabil, nume_fisier_intrare, lungime_baza);
+    nume_executabil[lungime_baza] = '\0';
+    strcat(nume_executabil, ".out");
+
+    char *argumente_compilare[] = {"gcc", "-o", nume_executabil, nume_fisier_iesire, NULL}; // Compilează fișierul C generat
+    execvp("gcc", argumente_compilare);
+    perror("Eroare la compilarea codului C");
 
     return EXIT_SUCCESS;
 }
